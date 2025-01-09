@@ -16,14 +16,14 @@ const DoubleNumber = (source : number[][]) => {
 
 //asc 
 const orderAsc = (source : number[][]) => {
-    let sortedSource = [...source].sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[0] - b[0]);
+    const sortedSource = [...source].sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[0] - b[0]);
   
     return sortedSource
 }
 
 //desc
 const orderDesc = (source : number[][]) => {
-        let sortedSource = [...source].sort((a, b) => (b[0] + b[1]) - (a[0] + a[1]) || b[0] - a[0]);
+        const sortedSource = [...source].sort((a, b) => (b[0] + b[1]) - (a[0] + a[1]) || b[0] - a[0]);
 
     return sortedSource
 }
@@ -31,7 +31,7 @@ const orderDesc = (source : number[][]) => {
 //remove Duplicate
 //Users can remove domino cards with the same total number and number combination
 const removeDuplicate = (source : number[][]) => {
-    let sortedSource = source.map(([a, b]) => (a <= b ? [a, b]: [b, a])).sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[0] - b[0])
+    const sortedSource = source.map(([a, b]) => (a <= b ? [a, b]: [b, a])).sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[0] - b[0])
 
     const freq = new Map<string, number>()
     for (const data of sortedSource) {
@@ -46,14 +46,14 @@ const removeDuplicate = (source : number[][]) => {
 
 //Flip the Cards
 const flipCard = (source : number[][]) => {
-    let flippedSource = source.map(([a, b]) => [b, a])
+    const flippedSource = source.map(([a, b]) => [b, a])
 
     return flippedSource
 }
 
 //remove cards by total
 const removeByTotal = (source : number[][], total : number | null) => {
-    let filteredSource = source.filter(([a, b]) => (a + b) !== total)
+    const filteredSource = source.filter(([a, b]) => (a + b) !== total)
 
     return filteredSource
 }
