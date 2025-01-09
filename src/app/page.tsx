@@ -1,101 +1,112 @@
-import Image from "next/image";
+"use client";
+import Card from "@/component/dominoCard";
+import { DoubleNumber, flipCard, orderAsc, orderDesc, removeByTotal, removeDuplicate, reset } from "@/function/utils";
+import { useState } from "react";
+import { FaDeleteLeft } from "react-icons/fa6";
+import { HiOutlineDuplicate } from "react-icons/hi";
+import { LuFlipVertical2 } from "react-icons/lu";
+import { RiResetLeftFill } from "react-icons/ri";
+import { TbSortAscendingNumbers, TbSortDescendingNumbers } from "react-icons/tb";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [dominoes, setDominoes] = useState([
+    [1, 6],
+    [4, 3],
+    [5, 1],
+    [3, 4],
+    [1, 1],
+    [3, 4],
+    [1, 2],
+  ]);
+  const [total, setTotal] = useState<number>(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const handleButtonClick = (action: string) => {
+    if (action === "orderAsc") {
+      const updatedDominoes = orderAsc(dominoes);
+      setDominoes(updatedDominoes);
+    }
+    if (action === "orderDesc") {
+      const updatedDominoes = orderDesc(dominoes);
+      setDominoes(updatedDominoes);
+    }
+    if (action === "removeDuplicate") {
+      const updatedDominoes = removeDuplicate(dominoes);
+      setDominoes(updatedDominoes);
+    }
+    if (action === "reset") {
+      const updatedDominoes = reset();
+      setDominoes(updatedDominoes);
+    }
+    if (action === "flip") {
+      const updatedDominoes = flipCard(dominoes);
+      setDominoes(updatedDominoes);
+    }
+    if (action === "removeByTotal") {
+      const updatedDominoes = removeByTotal(dominoes, total);
+      setDominoes(updatedDominoes);
+    }
+  };
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    // Mengonversi input menjadi angka
+    setTotal(Number(value));
+  };
+  return (
+    <div className="flex flex-col items-center py-5 bg-indigo-50 h-screen">
+      <h1 className="text-4xl font-bold text-blue-700">Dominoes</h1>
+      <div className="flex flex-col justify-evenly bg-white px-5 py-3 h-20 border border-indigo-400 rounded-xl my-2 min-w-[400px] lg:w-[600px]">
+        <h1 className="font-bold">Source: </h1>
+        <h1 className="text-indigo-500">[[1,6],[4, 3],[5, 1], [3, 4], [1, 1], [3, 4], [1, 2]]</h1>
+      </div>
+
+      <div className="flex flex-col justify-evenly bg-white px-5 py-3 h-20 border border-indigo-400 rounded-xl my-2 min-w-[400px] lg:w-[600px]">
+        <h1 className="font-bold">Double Numbers:</h1>
+        <h1 className="text-red-600">{DoubleNumber(dominoes)}</h1>
+      </div>
+
+      <div className="grid grid-cols-3 lg:flex min-h-40 lg:gap-10 gap-2 lg:w-[600px] w-[200px] justify-center">
+        {dominoes.map((data, idx) => {
+          return (
+            <div key={idx} className="flex border-2 divide-y-2 divide-indigo-200 bg-white border-indigo-200 justify-center px-2 my-2 w-16 rounded-xl h-32 lg:h-40">
+              <Card
+               idx1={dominoes[idx][0]} 
+               idx2={dominoes[idx][1]} />
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-2 min-w-[400px] lg:w-[700px]">
+        <button onClick={() => handleButtonClick("orderAsc")} className="bg-blue-500 lg:px-4 px-2 py-2 rounded-lg text-white m-4 hover:bg-blue-500/40 flex gap-2 items-center justify-center">
+        <TbSortAscendingNumbers />Order (Asc)
+        </button>
+
+        <button onClick={() => handleButtonClick("orderDesc")} className="bg-blue-500 lg:px-4 px-2 py-2 rounded-lg text-white m-4 hover:bg-blue-500/40 flex gap-2 items-center justify-center">
+        <TbSortDescendingNumbers />Order (Desc)
+        </button>
+
+        <button onClick={() => handleButtonClick("removeDuplicate")} className="bg-blue-500 lg:px-4 px-2 py-2 rounded-lg text-white m-4 hover:bg-blue-500/40 flex gap-2 items-center justify-center">
+        <HiOutlineDuplicate />Remove Duplicate
+        </button>
+
+        <button onClick={() => handleButtonClick("reset")} className="bg-blue-500 lg:px-4 px-2 py-2 rounded-lg text-white m-4 hover:bg-blue-500/40 flex gap-2 items-center justify-center">
+        <RiResetLeftFill /> Reset Dominoes
+        </button>
+
+        <button onClick={() => handleButtonClick("flip")} className="bg-blue-500 lg:px-4 px-2 py-2 rounded-lg text-white m-4 hover:bg-blue-500/40 flex gap-2 items-center justify-center">
+        <LuFlipVertical2 />flip
+        </button>
+
+        <span className="flex mx-4">
+          <input 
+          type="text"
+           value={total} 
+           onChange={handleInputChange} placeholder="Masukkan total nilai" className="border border-blue-500 lg:px-4 px-2 lg:py-2 rounded-l-lg my-4 min-w-[30px] max-w-[210px]" />
+          <button onClick={() => handleButtonClick("removeByTotal")} className="bg-blue-500 border-blue-500 lg:px-4 px-2 py-2 rounded-r-lg text-white hover:bg-blue-500/40 my-4 flex gap-2 items-center justify-center">
+          <FaDeleteLeft />remove
+          </button>
+        </span>
+          </div>
+      </div>
   );
 }
