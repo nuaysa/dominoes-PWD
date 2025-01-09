@@ -18,7 +18,7 @@ export default function Home() {
     [3, 4],
     [1, 2],
   ]);
-  const [total, setTotal] = useState<number>(0);
+  const [total, setTotal] = useState("");
 
   const handleButtonClick = (action: string) => {
     if (action === "orderAsc") {
@@ -42,14 +42,15 @@ export default function Home() {
       setDominoes(updatedDominoes);
     }
     if (action === "removeByTotal") {
-      const updatedDominoes = removeByTotal(dominoes, total);
+      const updatedDominoes = removeByTotal(dominoes, Number(total));
       setDominoes(updatedDominoes);
     }
   };
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    // Mengonversi input menjadi angka
-    setTotal(Number(value));
+    const value = event.target.value
+    if (!isNaN(Number(value))) {
+      setTotal(value); // Simpan sebagai string untuk input
+    };
   };
   return (
     <div className="flex flex-col items-center py-5 bg-indigo-50 h-screen">
@@ -60,14 +61,17 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col justify-evenly bg-white px-5 py-3 h-20 border border-indigo-400 rounded-xl my-2 min-w-[400px] lg:w-[600px]">
-        <h1 className="font-bold">Double Numbers:</h1>
+        <h1 className="font-bold">Double Number(s):</h1>
         <h1 className="text-red-600">{DoubleNumber(dominoes)}</h1>
       </div>
 
       <div className="grid grid-cols-3 lg:flex min-h-40 lg:gap-10 gap-2 lg:w-[600px] w-[200px] justify-center">
         {dominoes.map((data, idx) => {
+          const isLastItem = idx === dominoes.length - 1 && dominoes.length % 3 === 1;
           return (
-            <div key={idx} className="flex border-2 divide-y-2 divide-indigo-200 bg-white border-indigo-200 justify-center px-2 my-2 w-16 rounded-xl h-32 lg:h-40">
+            <div key={idx} className={`flex border-2 divide-y-2 divide-indigo-200 bg-white border-indigo-200 justify-center px-2 my-2 w-16 rounded-xl h-32 lg:h-40 ${
+              isLastItem ? "col-start-2" : ""
+            }`}>
               <Card
                idx1={dominoes[idx][0]} 
                idx2={dominoes[idx][1]} />
@@ -106,6 +110,9 @@ export default function Home() {
           <FaDeleteLeft />remove
           </button>
         </span>
+          </div>
+          <div>
+
           </div>
       </div>
   );
